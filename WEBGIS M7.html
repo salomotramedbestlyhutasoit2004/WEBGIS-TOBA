@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="id" data-bs-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGIS Kepadatan Penduduk Kabupaten Toba</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --batak-red: #c62828;
+        --batak-dark-red: #8e0000;
+        --batak-black: #1a1a1a;
+      }
+
+      [data-bs-theme="dark"] {
+        --batak-red: #ef5350;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      .text-batak {
+        color: var(--batak-red) !important;
+      }
+      .bg-batak {
+        background-color: var(--batak-red) !important;
+        color: white;
+      }
+      .btn-batak {
+        background-color: var(--batak-red);
+        color: white;
+        font-weight: 600;
+        border: none;
+      }
+      .btn-batak:hover {
+        background-color: var(--batak-dark-red);
+        color: white;
+      }
+
+      .navbar-custom {
+        background-color: rgba(26, 26, 26, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 3px solid var(--batak-red);
+      }
+      .navbar-custom .nav-link {
+        color: white !important;
+        font-weight: 500;
+        position: relative;
+        margin: 0 8px;
+      }
+      .navbar-custom .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        background: var(--batak-red);
+        bottom: 0;
+        left: 0;
+        transition: 0.3s ease;
+      }
+      .navbar-custom .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .hero-section {
+        height: 100vh;
+        min-height: 600px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("rumah batak.jpg") center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+      }
+      .hero-section h1 {
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      }
+
+      .gallery-wrapper {
+        position: relative;
+        padding: 0 40px;
+      }
+      .gallery-scroll {
+        display: flex;
+        overflow-x: hidden;
+        gap: 1.5rem;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        padding-bottom: 15px;
+      }
+
+      .gallery-item {
+        flex: 0 0 calc(33.333% - 1rem);
+        scroll-snap-align: start;
+        cursor: pointer;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .gallery-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+      }
+      .gallery-item img {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      @media (max-width: 992px) {
+        .gallery-item {
+          flex: 0 0 calc(50% - 0.75rem);
+        }
+      }
+      @media (max-width: 576px) {
+        .gallery-item {
+          flex: 0 0 100%;
+        }
+        .gallery-wrapper {
+          padding: 0 45px;
+        }
+      }
+
+      .btn-carousel {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .btn-prev {
+        left: -10px;
+      }
+      .btn-next {
+        right: -10px;
+      }
+
+      #map {
+        height: 470px;
+        width: 100%;
+        z-index: 1;
+      }
+
+      .leaflet-popup-content {
+        margin: 15px;
+      }
+      .popup-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--batak-red);
+        display: block;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 5px;
+        margin-bottom: 8px;
+      }
+      .popup-table td {
+        padding: 2px 0;
+        font-size: 12px;
+      }
+      .popup-table .label {
+        font-weight: 600;
+        color: #6c757d;
+        padding-right: 10px;
+      }
+
+      .info.legend {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        color: #333;
+        font-size: 12px;
+        line-height: 1.5;
+        min-width: 180px;
+      }
+      .info.legend h4 {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--batak-red);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .legend-item i {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+      .legend-item img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        flex-shrink: 0;
+        object-fit: contain;
+      }
+
+      [data-bs-theme="dark"] .info.legend {
+        background: #212529;
+        color: #f8f9fa;
+        border: 1px solid #495057;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">WebGIS Kependudukan Kabupaten Toba</a>
+        <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="#home">Utama</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">Tentang</a></li>
+            <li class="nav-item"><a class="nav-link" href="#gallery">Galeri</a></li>
+            <li class="nav-item"><a class="nav-link" href="#map-section">Peta</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Pesan</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="HTML + CSS + JS.html">Profil</a>
+            </li>
+
+            <li class="nav-item mt-2 mt-lg-0 ms-lg-3">
+              <button class="btn btn-outline-light btn-sm rounded-pill px-3" onclick="toggleTheme()" id="themeBtn">Mode Gelap</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header id="home" class="hero-section">
+      <div class="container">
+        <h1 class="display-3 fw-bold">Eksplorasi Demografi Toba</h1>
+        <p class="lead mt-3 opacity-75">Peta Interaktif Kepadatan Penduduk serta Sarana dan Layanan Publik di Kabupaten Toba, Sumatra Utara</p>
+      </div>
+    </header>
+
+    <section class="bg-batak py-5">
+      <div class="container text-center">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <h2 class="display-5 fw-bold mb-0">16</h2>
+            <p class="fs-5 mb-0 opacity-75">Kecamatan</p>
+          </div>
+          <div class="col-md-4">
+            <h2 class="display-5 fw-bold mb-0" id="total-penduduk">Menghitung...</h2>
+            <p class="fs-5 mb-0 opacity-75">Total Penduduk (Jiwa)</p>
+          </div>
+          <div class="col-md-4">
+            <h2 class="display-5 fw-bold mb-0">2.021</h2>
+            <p class="fs-5 mb-0 opacity-75">Total Luas Wilayah (Km&sup2;)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="py-5 my-md-4">
+      <div class="container">
+        <h2 class="fw-bold text-center mb-4">Tentang</h2>
+        <div class="row g-4 text-muted" style="text-align: justify; line-height: 1.8">
+          <div class="col-md-6">
+            Kabupaten Toba, yang berpusat di Kecamatan Balige, Provinsi Sumatra Utara, memiliki dinamika kependudukan yang sangat dipengaruhi oleh letak geografisnya di pesisir Danau Toba dan Pegunungan Bukit Barisan. Mayoritas masyarakat
+            di wilayah ini merupakan etnis Batak Toba yang kuat dalam memegang tradisi, dengan pergerakan ekonomi yang sebagian besar ditopang oleh sektor pertanian, perikanan dan pariwisata.
+          </div>
+          <div class="col-md-6">
+            WebGIS ini hadir sebagai informasi geospasial yang secara khusus memvisualisasikan data kependudukan di Kabupaten Toba berdasarkan data Badan Pusat Statistik (BPS) Toba terbaru, yaitu tahun 2024. Sistem interaktif ini dirancang
+            untuk memudahkan pemerintah daerah, akademisi hingga masyarakat umum untuk mengakses analisis persebaran penduduk serta sarana dan layanan publik dengan lebih mudah, praktis, informatif dan akurat.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="py-5 bg-body-tertiary">
+      <div class="container">
+        <h2 class="fw-bold text-center mb-5">Galeri</h2>
+        <div class="gallery-wrapper">
+          <button class="btn btn-batak btn-carousel btn-prev" onclick="scrollGallery(-1)">&#10094;</button>
+
+          <div class="gallery-scroll" id="galleryContainer">
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="danau toba.jpg" class="card-img-top" alt="Danau Toba" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Danau Toba</h6></div>
+            </div>
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="kantor bupati.jpg" class="card-img-top" alt="Kantor Bupati" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Kantor Bupati Toba</h6></div>
+            </div>
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="museum tb.jpg" class="card-img-top" alt="Museum" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Museum TB Silalahi Center</h6></div>
+            </div>
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="rs hkbp.jpg" class="card-img-top" alt="RS HKBP Balige" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Rumah Sakit HKBP Balige</h6></div>
+            </div>
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="polres toba.jpg" class="card-img-top" alt="Polres Toba" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Polres Toba</h6></div>
+            </div>
+            <div class="card border-0 shadow-sm gallery-item" onclick="openFoto(this)">
+              <img src="it del.jpg" class="card-img-top" alt="Institut Teknologi Del" />
+              <div class="card-body text-center"><h6 class="fw-bold text-batak mb-0">Institut Teknologi Del</h6></div>
+            </div>
+          </div>
+
+          <button class="btn btn-batak btn-carousel btn-next" onclick="scrollGallery(1)">&#10095;</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal fade" id="fotoModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+          <div class="modal-header border-0 pb-0 justify-content-end">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center pt-0">
+            <img id="modalImage" src="" class="img-fluid rounded shadow-lg" alt="Zoom Foto" />
+            <h4 id="modalCaption" class="text-white mt-3 fw-bold"></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="map-section" class="py-5 my-md-4">
+      <div class="container">
+        <h2 class="fw-bold text-center mb-4">Peta Interaktif</h2>
+        <div class="rounded border border-2 shadow-lg overflow-hidden" style="border-color: var(--batak-red) !important">
+          <div id="map"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="py-5 bg-body-tertiary">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-md-8">
+            <h2 class="fw-bold text-center mb-4">Hubungi Saya</h2>
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4 p-md-5">
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Nama Lengkap</label>
+                    <input type="text" class="form-control" placeholder="Masukkan nama Anda..." />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" class="form-control" placeholder="contoh@email.com" />
+                  </div>
+                  <div class="mb-4">
+                    <label class="form-label fw-semibold">Pesan</label>
+                    <textarea class="form-control" rows="4" placeholder="Tulis pesan Anda di sini..."></textarea>
+                  </div>
+                  <button type="button" class="btn btn-batak w-100 py-2 rounded-3">Kirim Pesan</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-4 text-center text-white" style="background-color: var(--batak-black)">
+      <div class="container">
+        <small>&copy; 2026 Salomo Tramed Bestly Hutasoit | Praktikum Sistem Informasi Geospasial Berbasis Web</small>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="Data administrasi kependudukan Toba.js"></script>
+    <script src="Data Point.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.getElementById("themeBtn");
+
+        if (html.getAttribute("data-bs-theme") === "light") {
+          html.setAttribute("data-bs-theme", "dark");
+          btn.innerText = "Mode Terang";
+          btn.classList.replace("btn-outline-light", "btn-light");
+        } else {
+          html.setAttribute("data-bs-theme", "light");
+          btn.innerText = "Mode Gelap";
+          btn.classList.replace("btn-light", "btn-outline-light");
+        }
+      }
+
+      function scrollGallery(direction) {
+        const container = document.getElementById("galleryContainer");
+        const firstItem = container.querySelector(".gallery-item");
+        if (!firstItem) return;
+
+        const style = window.getComputedStyle(container);
+        const gap = parseFloat(style.gap) || 24;
+        const scrollAmount = firstItem.offsetWidth + gap;
+
+        container.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+      }
+
+      const modalInstance = new bootstrap.Modal(document.getElementById("fotoModal"));
+
+      function openFoto(element) {
+        const imgSrc = element.querySelector("img").src;
+        const caption = element.querySelector("h6").innerText;
+
+        document.getElementById("modalImage").src = imgSrc;
+        document.getElementById("modalCaption").innerText = caption;
+
+        modalInstance.show();
+      }
+
+      var map = L.map("map").setView([2.4, 99.2], 10);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "&copy; OpenStreetMap" }).addTo(map);
+
+      var icons = {
+        pemerintahan: L.icon({ iconUrl: "icon_pemerintahan.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+        pendidikan: L.icon({ iconUrl: "icon_pendidikan.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+        pariwisata: L.icon({ iconUrl: "icon_pariwisata.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+        kesehatan: L.icon({ iconUrl: "icon_kesehatan.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+        industri: L.icon({ iconUrl: "icon_industri.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+        keamanan: L.icon({ iconUrl: "icon_keamanan.png", iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -12] }),
+      };
+
+      function getColor(d) {
+        return d > 50000 ? "#800026" : d > 40000 ? "#BD0026" : d > 30000 ? "#E31A1C" : d > 20000 ? "#FC4E2A" : d > 10000 ? "#FD8D3C" : "#FFEDA0";
+      }
+
+      function getIconCategory(properties) {
+        var teks = ((properties.REMARK || "") + " " + (properties.NAMOBJ || "")).toLowerCase();
+
+        if (
+          teks.includes("rumah sakit") || 
+          teks.includes("rsu") || 
+          teks.includes("rs ") || 
+          teks.includes("kesehatan") || 
+          teks.includes("puskesmas") || 
+          teks.includes("klinik")
+        ) {
+          return { icon: icons.kesehatan, label: "Kesehatan" };
+        }
+        if (
+          teks.includes("sekolah") ||
+          teks.includes("pendidikan") ||
+          teks.includes("sma ") ||
+          teks.includes("smk ") ||
+          teks.includes("smp ") ||
+          teks.includes("sd ") ||
+          teks.includes("universitas") ||
+          teks.includes("akademi") ||
+          teks.includes("institut") ||
+          teks.includes("politeknik") ||
+          teks.includes("yayasan")
+        ) {
+          return { icon: icons.pendidikan, label: "Pendidikan" };
+        }
+        if (
+          teks.includes("pariwisata") || 
+          teks.includes("wisata") || 
+          teks.includes("museum") || 
+          teks.includes("taman") || 
+          teks.includes("air terjun") || 
+          teks.includes("pantai")
+        ) {
+          return { icon: icons.pariwisata, label: "Pariwisata" };
+        }
+        if (
+          teks.includes("industri") || 
+          teks.includes("pabrik") || 
+          teks.includes("pt.") || 
+          teks.includes("cv.")
+        ) {
+          return { icon: icons.industri, label: "Industri" };
+        }
+        if (
+          teks.includes("polisi") || 
+          teks.includes("keamanan") || 
+          teks.includes("polsek") || 
+          teks.includes("polres") || 
+          teks.includes("samsat")
+        ) {
+          return { icon: icons.keamanan, label: "Keamanan" };
+        }
+        return { icon: icons.pemerintahan, label: "Pemerintahan" };
+      }
+
+      let totalPenduduk = 0;
+
+      var geojsonArea = L.geoJSON(area_toba, {
+        style: function (f) {
+          var val = f.properties.Kepadata_1 || 0;
+          return { fillColor: getColor(val), weight: 1.5, opacity: 1, color: "white", dashArray: "3", fillOpacity: 0.7 };
+        },
+        onEachFeature: function (f, l) {
+          var val = f.properties.Kepadata_1 || 0;
+          totalPenduduk += val;
+
+          l.bindPopup(`
+            <span class="popup-title">Kecamatan ${f.properties.NAMOBJ}</span>
+            <table class="popup-table">
+              <tr><td class="label">Penduduk</td><td>: ${val.toLocaleString("id-ID")} Jiwa</td></tr>
+            </table>
+          `);
+
+          l.on({
+            mouseover: (e) => e.target.setStyle({ weight: 4, color: "#c62828", fillOpacity: 0.9 }),
+            mouseout: (e) => geojsonArea.resetStyle(e.target),
+          });
+        },
+      }).addTo(map);
+
+      document.getElementById("total-penduduk").innerText = totalPenduduk.toLocaleString("id-ID");
+      map.fitBounds(geojsonArea.getBounds());
+
+      L.geoJSON(point_toba, {
+        pointToLayer: (f, latlng) => L.marker(latlng, { icon: getIconCategory(f.properties).icon }),
+        onEachFeature: (f, l) => {
+          var cat = getIconCategory(f.properties);
+          var lat = l.getLatLng().lat,
+            lng = l.getLatLng().lng;
+          var coords = `${Math.abs(lat).toFixed(5)} ${lat >= 0 ? "LU" : "LS"}, ${Math.abs(lng).toFixed(5)} ${lng >= 0 ? "BT" : "BB"}`;
+
+          l.bindPopup(`
+            <span class="popup-title">${f.properties.NAMOBJ}</span>
+            <table class="popup-table">
+              <tr><td class="label">Kategori</td><td>: ${cat.label}</td></tr>
+              <tr><td class="label">Koordinat</td><td>: ${coords}</td></tr>
+            </table>
+          `);
+        },
+      }).addTo(map);
+
+      var legend = L.control({ position: "bottomright" });
+      legend.onAdd = function () {
+        var div = L.DomUtil.create("div", "info legend"),
+          grades = [0, 10000, 20000, 30000, 40000, 50000];
+
+        div.innerHTML += "<h4>Jumlah Penduduk</h4>";
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML += `<div class="legend-item"><i style="background:${getColor(grades[i] + 1)}"></i> <span>${grades[i].toLocaleString("id-ID")}${grades[i + 1] ? " &ndash; " + grades[i + 1].toLocaleString("id-ID") : "+"}</span></div>`;
+        }
+
+        div.innerHTML += "<hr class='my-2'><h4>SARANA & LAYANAN<span style='display: block; text-align: center;'>PUBLIK</span></h4>";
+        const categories = [
+          { iconUrl: "icon_pemerintahan.png", label: "Pemerintahan" },
+          { iconUrl: "icon_pendidikan.png", label: "Pendidikan" },
+          { iconUrl: "icon_pariwisata.png", label: "Pariwisata" },
+          { iconUrl: "icon_kesehatan.png", label: "Kesehatan" },
+          { iconUrl: "icon_industri.png", label: "Industri" },
+          { iconUrl: "icon_keamanan.png", label: "Keamanan" },
+        ];
+
+        categories.forEach((c) => {
+          div.innerHTML += `<div class="legend-item"><img src="${c.iconUrl}"> <span>${c.label}</span></div>`;
+        });
+
+        return div;
+      };
+      legend.addTo(map);
+
+      L.control.scale({ imperial: false }).addTo(map);
+    </script>
+  </body>
+</html>
