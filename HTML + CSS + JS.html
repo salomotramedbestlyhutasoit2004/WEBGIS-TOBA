@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+<meta charset="UTF-8">
+<title>Profil - Salomo Tramed Bestly Hutasoit</title>
+
+<style>
+
+body{
+font-family: Arial, Helvetica, sans-serif;
+background-color:#ffffff;
+margin:0;
+scroll-behavior:smooth;
+transition:0.3s;
+}
+
+header{
+background-color:#0a66c2;
+color:#ffffff;
+padding:20px;
+text-align:center;
+}
+
+nav{
+background-color:#004182;
+padding:10px;
+text-align:center;
+}
+
+nav a{
+color:#ffffff;
+text-decoration:none;
+margin:12px;
+font-weight:bold;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#ffd700;
+}
+
+section{
+padding:20px;
+margin:20px;
+background-color:#ffffff;
+border-radius:10px;
+box-shadow:0px 2px 6px rgba(0,0,0,0.1);
+}
+
+h2{
+color:#0a66c2;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th{
+background:#0a66c2;
+color:white;
+text-align:center;
+}
+
+table, th, td{
+border:1px solid #ccc;
+padding:10px;
+}
+
+footer{
+background-color:#0a66c2;
+color:#ffffff;
+text-align:center;
+padding:15px;
+margin-top:20px;
+}
+
+.highlight{
+color:#004182;
+font-weight:bold;
+}
+
+#profile-img{
+width:200px;
+border-radius:50%;
+border:3px solid #ffffff;
+}
+
+.sertifikat-icon{
+font-size:22px;
+cursor:pointer;
+text-align:center;
+}
+
+#popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+#popup img{
+width:auto;
+height:auto;
+max-width:90vw;
+max-height:90vh;
+object-fit:contain;
+border-radius:10px;
+}
+
+#popup span{
+position:absolute;
+top:20px;
+right:30px;
+color:white;
+font-size:30px;
+cursor:pointer;
+}
+
+.landscape{
+max-width:90vw;
+max-height:80vh;
+}
+
+.portrait{
+max-height:90vh;
+max-width:60vw;
+}
+
+#topBtn{
+position:fixed;
+bottom:20px;
+right:30px;
+padding:10px 15px;
+background-color:#004182;
+color:#ffffff;
+border:none;
+border-radius:5px;
+cursor:pointer;
+display:none;
+}
+
+form input, textarea{
+width:100%;
+padding:8px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+form input[type=submit]{
+background:#0a66c2;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.dark{
+background:#121212;
+color:white;
+}
+
+.dark section{
+background:#1e1e1e;
+}
+
+.dark nav{
+background:#222;
+}
+
+.dark h2{
+color:#4da6ff;
+}
+
+button{
+padding:8px 15px;
+margin:5px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<img src="profil.jpeg" id="profile-img" alt="Foto Profil">
+
+<h1>Salomo Tramed Bestly Hutasoit</h1>
+
+<p><i>Teknologi Survei dan Pemetaan Dasar - Universitas Gadjah Mada</i></p>
+
+<button onclick="darkMode()">Mode Gelap</button>
+
+</header>
+
+<nav>
+
+<a href="#tentang">Tentang Saya</a>
+<a href="#pendidikan">Pendidikan</a>
+<a href="#pengalamankerja">Pengalaman Kerja</a>
+<a href="#penghargaan">Penghargaan</a>
+<a href="#pengalamanorganisasi">Pengalaman Organisasi</a>
+<a href="#pengalamankegiatan">Pengalaman Acara/Kegiatan</a>
+<a href="#kontak">Kontak</a>
+
+</nav>
+
+<section id="tentang">
+
+<h2>Tentang Saya</h2>
+
+<p>
+Sebagai mahasiswa vokasi dari program studi Teknologi Survei dan Pemetaan Dasar di 
+<span class="highlight">Universitas Gadjah Mada</span>, saya memiliki minat besar untuk memperluas pengetahuan serta memperkaya pengalaman praktis dalam bidang pengambilan dan pengolahan data geospasial.
+</p>
+
+</section>
+
+<section id="keahlianteknis">
+
+<h2>Keahlian Teknis</h2>
+
+<ul>
+<li>Fotogrametri</li>
+<li>Kartografi</li>
+<li>Pemetaan Digital</li>
+<li>Penginderaan Jauh</li>
+<li>Sistem Informasi Geospasial (SIG)</li>
+<li>Survei Terestris</li>
+</ul>
+
+</section>
+
+<section id="keahliannonteknis">
+
+<h2>Keahlian Non Teknis</h2>
+
+<ul>
+<li>Kerjasama Tim</li>
+<li>Komunikasi</li>
+<li>Penyelesaian Masalah</li>
+<li><i>Public Speaking</i></li>
+</ul>
+
+</section>
+
+<section id="pendidikan">
+
+<h2>Pendidikan</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Institusi</th>
+<th>Program Studi</th>
+<th>Tahun</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Universitas Gadjah Mada</td>
+<td>Sarjana Terapan Teknologi Survei dan Pemetaan Dasar</td>
+<td>2024 - Sekarang</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>SMA Negeri 2 Lintongnihuta</td>
+<td>Matematika dan Ilmu Pengetahuan Alam</td>
+<td>2019 - 2022</td>
+</tr>
+
+</table>
+
+</section>
+
+<section id="pengalamankerja">
+
+<h2>Pengalaman Kerja</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Instansi</th>
+<th>Posisi</th>
+<th>Tahun</th>
+<th>Deskripsi</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Badan Pertanahan Nasional Kantor Wilayah Sumatera Utara</td>
+<td>Asisten Surveyor</td>
+<td>Oktober 2023 - Januari 2024</td>
+<td>Melakukan pengukuran ulang tanah Hak Guna Usaha menggunakan GNSS dengan metode RTK dan Statik serta pengolahan data menggunakan AutoCAD Map.</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>PT Indonesia Asahan Aluminium</td>
+<td>Magang</td>
+<td>Januari - Februari 2026</td>
+<td>Melakukan survei lapangan dan pengolahan data spasial serta pembuatan peta menggunakan QGIS dan Google Earth.</td>
+</tr>
+
+</table>
+
+</section>
+
+<section id="penghargaan">
+
+<h2>Penghargaan</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Nama Lomba</th>
+<th>Medali</th>
+<th>Tahun</th>
+<th>Sertifikat</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Pekan Olahraga Vokasi dan Vocational Art Festival (POVVAF) Lomba Desain Startup</td>
+<td>Perunggu</td>
+<td>2025</td>
+<td class="sertifikat-icon" onclick="showCert('POVVAF.jpg')">📄</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Kompetisi Sains Indonesia (KSI) Bidang Komputer</td>
+<td>Perak</td>
+<td>2021</td>
+<td class="sertifikat-icon" onclick="showCert('KSI.jpg')">📄</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Olimpiade Numerasi Nasional (ONN)</td>
+<td>Perak</td>
+<td>2020</td>
+<td class="sertifikat-icon" onclick="showCert('ONN.jpg')">📄</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Olimpiade Pahlawan Sains Indonesia (OPSI) Bidang Komputer</td>
+<td>Perak</td>
+<td>2020</td>
+<td class="sertifikat-icon" onclick="showCert('OPSI.jpg')">📄</td>
+</tr>
+
+</table>
+
+</section>
+
+<section id="pengalamanorganisasi">
+
+<h2>Pengalaman Organisasi</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Organisasi</th>
+<th>Jabatan</th>
+<th>Masa Jabatan</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Ikatan Mahasiswa Geodesi Indonesia (IMGI)</td>
+<td>Forum Komunikasi (FORKOM) KMTSP UGM</td>
+<td>Juli 2025 - Sekarang</td>
+</tr>
+
+<tr>
+<td rowspan="2">2</td>
+<td rowspan="2">Keluarga Mahasiswa Teknologi Survei Pemetaan Universitas Gadjah Mada (KMTSP UGM)</td>
+<td>Wakil Kepala Departemen Hubungan Masyarakat (HUMAS)</td>
+<td>Maret - Desember 2025</td>
+</tr>
+
+<tr>
+<td>Koordinator Eksternal</td>
+<td>Desember 2025 - Sekarang</td>
+</tr>
+
+<tr> 
+<td rowspan="2">3</td> 
+<td rowspan="2">Keluarga Mahasiswa Departemen Teknik Kebumian Sekolah Vokasi Universitas Gadjah Mada (KMDTK SV UGM)</td> 
+<td>Wakil Kepala Divisi Riset dan Pengembangan (RISBANG)</td>
+<td>Januari - November 2025</td> 
+</tr> 
+
+<tr> 
+<td>Biro Ilmu Pengetahuan dan Teknologi (IPTEK)</td>
+<td>Desember 2025 - Sekarang</td> 
+</tr> 
+
+<tr> 
+<td>4</td> 
+<td>Persekutuan Mahasiswa Kristen Sekolah Vokasi Universitas Gadjah Mada (PMK SV UGM)</td>
+<td>Hubungan Masyarakat (HUMAS)</td> 
+<td>Februari 2026 - Sekarang</td> 
+</tr>
+
+</table>
+
+</section>
+
+<section id="pengalamankegiatan">
+
+<h2>Pengalaman Acara/Kegiatan</h2>
+
+<table>
+
+<tr>
+<th>No</th>
+<th>Nama Kegiatan</th>
+<th>Seksi/Peran</th>
+<th>Waktu</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>MAPID Catalyst 2025: Community Innovation Series</td>
+<td>Hubungan Masyarakat (HUMAS) dan Liaison Officer (LO)</td>
+<td>April - Mei 2025</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>KOMPaS 2025</td>
+<td>Koordinator Hubungan Masyarakat (HUMAS)</td>
+<td>Juli - Agustus 2025</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Pionir Permadani 2025 - Departemen Teknologi Kebumian</td>
+<td>Pemateri Instrumen Survei</td>
+<td>Agustus 2025</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>SPATIAL 2025/2026</td>
+<td>Hubungan Masyarakat (HUMAS)</td>
+<td>Agustus 2025 - Mei 2026</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Dies Natalis Ikatan Mahasiswa Geodesi Indonesia (IMGI) ke-32</td>
+<td>Koordinator Hubungan Masyarakat (HUMAS)</td>
+<td>September - November 2025</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Praktikum Kerja Lapangan Hidrografi 2025</td>
+<td>Koordinator Peralatan</td>
+<td>Oktober 2025</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>Geomatics 5th-K Lustrum Run</td>
+<td>Operator Peralatan</td>
+<td>November - Desember 2025</td>
+</tr>
+
+</table>
+
+</section>
+
+<section id="kontak">
+
+<h2>Kontak</h2>
+
+<p><b>No Telepon:</b> +62 812 6287 6050</p>
+
+<p><b>Email:</b> salomotramedbestlyhutasoit2004@mail.ugm.ac.id | salomohutasoit02@gmail.com</p>
+
+<p><b>LinkedIn:</b>
+<a href="https://www.linkedin.com/in/salomo-tramed-bestly-hutasoit" target="_blank">
+linkedin.com/in/salomo-tramed-bestly-hutasoit
+</a>
+</p>
+
+<p><b>Instagram:</b>
+<a href="https://www.instagram.com/salomohutasoit_" target="_blank">
+instagram.com/salomohutasoit_
+</a>
+</p>
+
+</section>
+
+<section>
+
+<h2>Kirim Pesan</h2>
+
+<form id="formPesan">
+
+Nama<br>
+<input type="text" id="nama"><br><br>
+
+Email<br>
+<input type="email" id="email"><br><br>
+
+Pesan<br>
+<textarea id="pesan"></textarea><br><br>
+
+<input type="submit" value="Kirim">
+
+</form>
+
+</section>
+
+<button onclick="topFunction()" id="topBtn">Top</button>
+
+<div id="popup">
+<span onclick="closeCert()">✖</span>
+<img id="certImg">
+</div>
+
+<footer>
+<p>© 2026 Salomo Tramed Bestly Hutasoit | Praktikum Sistem Informasi Geospasial Berbasis Web</p>
+</footer>
+
+<script>
+
+function darkMode(){
+document.body.classList.toggle("dark");
+}
+
+document.getElementById("formPesan").addEventListener("submit",function(e){
+
+let nama=document.getElementById("nama").value
+let email=document.getElementById("email").value
+let pesan=document.getElementById("pesan").value
+
+if(nama=="" || email=="" || pesan==""){
+alert("Semua data harus diisi!")
+e.preventDefault()
+}else{
+alert("Pesan berhasil dikirim!")
+}
+
+})
+
+let mybutton=document.getElementById("topBtn")
+
+window.onscroll=function(){
+
+if(document.body.scrollTop>200 || document.documentElement.scrollTop>200){
+mybutton.style.display="block"
+}else{
+mybutton.style.display="none"
+}
+
+}
+
+function topFunction(){
+document.body.scrollTop=0
+document.documentElement.scrollTop=0
+}
+
+function showCert(img){
+
+let gambar=document.getElementById("certImg")
+
+gambar.src=img
+
+gambar.onload=function(){
+
+if(gambar.naturalWidth>gambar.naturalHeight){
+gambar.classList.remove("portrait")
+gambar.classList.add("landscape")
+}else{
+gambar.classList.remove("landscape")
+gambar.classList.add("portrait")
+}
+
+}
+
+document.getElementById("popup").style.display="flex"
+
+}
+
+function closeCert(){
+document.getElementById("popup").style.display="none"
+}
+
+</script>
+
+</body>
+</html>
